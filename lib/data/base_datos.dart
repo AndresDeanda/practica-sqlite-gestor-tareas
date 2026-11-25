@@ -17,8 +17,14 @@ class AppDatabase extends _$AppDatabase {
   int get schemaVersion => 1;
 
   static QueryExecutor _openConnection() {
-    return driftDatabase(name: 'gestor_tareas_db');
-  }
+  return driftDatabase(
+    name: 'gestor_tareas_db',
+    web: DriftWebOptions(
+      sqlite3Wasm: Uri.parse('sqlite3.wasm'),
+      driftWorker: Uri.parse('drift_worker.dart.js'),
+    ),
+  );
+}
 
   Stream<List<Tarea>> observarTareas() {
     final query = select(tareas)..orderBy([(t) => OrderingTerm.desc(t.id)]);
